@@ -1,12 +1,16 @@
 import { createClient } from "@/lib/supabase/server";
-
-export const dynamic = "force-dynamic";
+import { redirect } from "next/navigation";
 
 export default async function HomePage() {
   const supabase = await createClient();
   const {
     data: { user },
+    error,
   } = await supabase.auth.getUser();
+
+  if (error) {
+    redirect("/sign-in");
+  }
 
   return (
     <main className="p-8">
